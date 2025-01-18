@@ -2,7 +2,7 @@ use actix_web::web::{self, Json, Path};
 use actix_web::HttpResponse;
 
 use crate::constants::APPLICATION_JSON;
-use crate::tweets::{Tweet, TweetRequest, Tweets};
+use crate::tweets::{TweetRequest, Tweets};
 
 /// List 50 last tweets `/tweets`
 #[get("/tweets")]
