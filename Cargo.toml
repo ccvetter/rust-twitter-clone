@@ -1,0 +1,24 @@
+[package]
+name = "rust-api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.0.0-beta.8"
+actix-rt = "2.5.0"
+diesel = { version = "2.2.6", features = [
+    "postgres",
+    "r2d2",
+    "uuid",
+    "chrono",
+] }
+diesel_migrations = "2.2.0"
+dotenvy = "0.15.7"
+lazy_static = "1.5.0"
+listenfd = "1.0.1"
+r2d2 = "0.8.10"
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.65"
+chrono = { version = "0.4.19", features = ["serde"] }
+uuid = { version = "1.12.0", features = ["serde", "v4"] }
+env_logger = "0.11.6"
