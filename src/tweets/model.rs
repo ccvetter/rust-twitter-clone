@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use diesel::prelude::AsChangeset;
-use diesel::{ExpressionMethods, Insertable, QueryDsl, Queryable, RunQueryDsl, Selectable, SelectableHelper};
+use diesel::{ExpressionMethods, Insertable, QueryDsl, Queryable, RunQueryDsl, Selectable};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -52,11 +52,16 @@ impl Tweets {
             .limit(50)
             .load::<Tweet>(&mut conn)
             .expect("Error loading tweets");
-
         Ok(tweets)
     }
 
-
+    pub fn delete(id: Uuid) -> Result<usize, CustomError> {
+        let mut conn = db::connection()?;
+        let deleted_tweet = diesel::delete(tweets::table.filter(tweets::id.eq(id)))
+            .execute(&mut conn)
+            .expect("Error deleting tweet");
+        Ok(deleted_tweet)
+    }
 
 }
 

@@ -4,12 +4,10 @@ use actix_web::HttpResponse;
 use crate::constants::APPLICATION_JSON;
 use crate::tweets::{Tweet, TweetRequest, Tweets};
 
-
-
 /// List 50 last tweets `/tweets`
 #[get("/tweets")]
 pub async fn list() -> HttpResponse {
-    let tweets: Vec<Tweet> = Tweets::find_all().unwrap();
+    let tweets = Tweets::find_all().unwrap();
 
     HttpResponse::Ok()
         .content_type(APPLICATION_JSON)
@@ -19,7 +17,6 @@ pub async fn list() -> HttpResponse {
 /// Create a tweet `/tweets`
 #[post("/tweets")]
 pub async fn create(tweet_req: Json<TweetRequest>) -> HttpResponse {
-    println!("Tweet: {:?}", tweet_req);
     if let Some(message) = &tweet_req.message {
         Tweets::create(message.clone()).unwrap();
     } else {
@@ -43,17 +40,11 @@ pub async fn get(path: Path<(String,)>) -> HttpResponse {
 /// Delete a tweet by its id `/tweets/{id}`
 #[delete("/tweets/{id}")]
 pub async fn delete(path: Path<(String,)>) -> HttpResponse {
-    // TODO delete the tweet by its id and return it
-    let deleted_tweet: Option<Tweet> = None;
+    let deleted_tweet = Tweets::delete(path.0.parse().unwrap()).unwrap();
 
-    match deleted_tweet {
-        Some(tweet) => HttpResponse::Ok()
-            .content_type(APPLICATION_JSON)
-            .json(tweet),
-        None => HttpResponse::NoContent()
-            .content_type(APPLICATION_JSON)
-            .finish()
-    }
+    HttpResponse::Ok()
+        .content_type(APPLICATION_JSON)
+        .json(deleted_tweet)
 }
 
 pub fn init_routes(config: &mut web::ServiceConfig) {

@@ -31,7 +31,6 @@ impl Likes {
             .values(&like)
             .execute(&mut conn)
             .expect("Error saving tweet");
-
         Ok(like)
     }
 
