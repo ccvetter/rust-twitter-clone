@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use diesel::prelude::AsChangeset;
-use diesel::{ExpressionMethods, Insertable, QueryDsl, Queryable, RunQueryDsl};
+use diesel::{ExpressionMethods, Insertable, QueryDsl, Queryable, RunQueryDsl, Selectable, SelectableHelper};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -9,7 +9,7 @@ use crate::error_handler::CustomError;
 use crate::likes::Like;
 use crate::schema::tweets;
 
-#[derive(Debug, Deserialize, Serialize, AsChangeset, Insertable, Queryable)]
+#[derive(Debug, Deserialize, Serialize, AsChangeset, Insertable, Queryable, Selectable)]
 #[diesel(table_name = tweets)]
 pub struct Tweet {
     pub id: Uuid,
@@ -45,6 +45,18 @@ impl Tweets {
             .expect("Error loading tweet");
         Ok(tweet)
     }
+
+    pub fn find_all() -> Result<Vec<Tweet>, CustomError> {
+        let mut conn = db::connection()?;
+        let tweets = tweets::table
+            .limit(50)
+            .load::<Tweet>(&mut conn)
+            .expect("Error loading tweets");
+
+        Ok(tweets)
+    }
+
+
 
 }
 

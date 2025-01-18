@@ -9,8 +9,7 @@ use crate::tweets::{Tweet, TweetRequest, Tweets};
 /// List 50 last tweets `/tweets`
 #[get("/tweets")]
 pub async fn list() -> HttpResponse {
-    // TODO find the last 50 tweets and return them
-    let tweets: Vec<Tweet> = vec![];
+    let tweets: Vec<Tweet> = Tweets::find_all().unwrap();
 
     HttpResponse::Ok()
         .content_type(APPLICATION_JSON)

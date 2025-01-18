@@ -40,7 +40,6 @@ impl Likes {
         
         let likes = likes::table
             .filter(likes::tweet_id.eq(tweet_id))
-            .limit(50)
             .load::<Likes>(&mut conn)
             .expect("Error loading likes");
         Ok(likes)
